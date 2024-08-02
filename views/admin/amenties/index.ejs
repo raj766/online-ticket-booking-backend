@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../common/head'); %>
+  </head>
+  <body>
+    <div class="container-scroller">
+      <%- include('../common/header'); %>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <%- include('../common/sidebar'); %>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title">
+                Manage Operator Type
+              </h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Manage Operator
+                      Type</a></li>
+                  <li class="breadcrumb-item active"
+                    aria-current="page">List</li>
+                </ol>
+              </nav>
+            </div>
+            <div class="card">
+              <div class="card-body">
+                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal-2">Add New Type<i class="fa fa-play-circle ml-1"></i></button>
+                <div class="row">
+                  <div class="col-12">
+                    <div class="table-responsive">
+                      <table id="order-listing" class="table">
+                        <thead>
+                          <tr>
+                            <th>SNO</th>
+                            <th>Operator Type</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% data.forEach((operator, index) => { %>
+                            <tr>
+                                <td><%= index + 1 %></td>
+                                <td><%= operator.title %></td>
+                                <td>
+                                      <%
+                                      if (operator.status == 1) {
+                                        %>
+                                       
+                                        <label class="badge badge-info">Active</label>
+                                      <%
+                                        }
+                                        if (operator.status == 0) {
+                                       %>
+                                        <label class="badge badge-danger">Inactive</label>
+                                      <%
+                                      }
+                                      %>
+                                </td>
+                                <td>
+                                    <button class="btn btn-outline-primary">View</button>
+                                </td>
+                            </tr>
+                        <% }) %>
+                         
+
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+          <%- include('../common/copyright'); %>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+     
+      <div class="modal fade" id="exampleModal-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-2" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel-2">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form class="forms-sample" id="formSubmit"> 
+            <div class="modal-body">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Operator Type Title</label>
+                  <input type="text" name="title" class="form-control" id="exampleInputEmail1" placeholder="Enter Title">
+                </div>
+                <div class="form-group">
+                  <label>Status</label>
+                  <div style="margin-left:50px">
+                    <input type="radio" class="form-check-input" name="status" value="1" checked>
+                    Active
+                  <br>
+                  <input type="radio" class="form-check-input" name="status" value="0">
+                    Inactive
+                  </div>
+                  
+                </div>
+              
+            </div>
+            <div class="modal-footer">
+              <button  class="btn btn-success">Submit</button>
+              <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- container-scroller -->
+    <%- include('../common/footer'); %>
+    <script>
+      $(document).ready(function () {
+          $('#formSubmit').on('submit', function (e) {
+              e.preventDefault();
+              var formData = {
+                  title: $('input[name="title"]').val(),
+                  status: $('input[name="status"]:checked').val()
+              };
+
+              $.ajax({
+                  type: 'POST',
+                  url: '<%= process.env.ADMIN_PREFIX %>/saveOeratprType',
+                  data: JSON.stringify(formData),
+                  contentType: 'application/json',
+                  success: function (response) {
+                    if (response.status === true) {
+                      toastr.success(response.message);
+                      setTimeout(() => {
+                        location.reload();
+                      }, 1000);
+                    } else if (response.status === false) {
+                      toastr.error(response.message);
+                    }else if (response.errors) {
+                      if (response.errors.title) {
+                        toastr.error(response.errors.title);  
+                      }
+                    }else{
+                      toastr.error(response);
+                    }
+                  },
+                  error: function (error) {
+                      toastr.error('Error submitting form');
+                  }
+              });
+          });
+      });
+  </script>
+  </body>
+
+</html>

@@ -1,0 +1,56 @@
+  <!-- partial:partials/_sidebar.html -->
+  <nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <ul class="nav">
+      <li class="nav-item nav-profile">
+        <div class="nav-link">
+          <div class="profile-image">
+            <img src="../admin/images/faces/face5.jpg" alt="image"/>
+          </div>
+          <div class="profile-name">
+            <p class="name">
+              Welcome Jane
+            </p>
+            <p class="designation">
+              Super Admin
+            </p>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="<%= process.env.ADMIN_PREFIX %>/dashboard">
+          <i class="fa fa-home menu-icon"></i>
+          <span class="menu-title">Dashboard</span>
+        </a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+          <i class="far fa-compass menu-icon"></i>
+          <span class="menu-title">Manage Operator</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="ui-basic">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" href="<%= process.env.ADMIN_PREFIX %>/operator-type">Manage Operator Type</a></li>
+          </ul>
+          </div>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+          <i class="far fa-compass menu-icon"></i>
+          <span class="menu-title">Manage Location</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="ui-basic">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/accordions.html">Manage State</a></li>
+            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Manage City</a></li>
+            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/badges.html">Manage Station</a></li>
+            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/breadcrumbs.html">Manage Boarding/Dropping Points</a></li>
+          </ul>
+          </div>
+      </li>
+      
+    </ul>
+  </nav>

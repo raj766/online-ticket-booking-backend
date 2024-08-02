@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>KriyoBus Admin Login</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet"
+      href="../admin/vendors/iconfonts/font-awesome/css/all.min.css">
+    <link rel="stylesheet" href="../admin/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="../admin/vendors/css/vendor.bundle.addons.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="../admin/css/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="../admin/images/favicon.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+  </head>
+
+  <body>
+    <div class="container-scroller">
+      <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="content-wrapper d-flex align-items-stretch auth auth-img-bg">
+          <div class="row flex-grow">
+            <div
+              class="col-lg-6 d-flex align-items-center justify-content-center">
+              <div class="auth-form-transparent text-left p-3">
+                <div class="brand-logo">
+                  <!-- <h2>KriyoBus</h2> -->
+                  <!-- <img src="../admin/images/logo.svg" alt="logo"> -->
+                </div>
+                <!-- <h4>Welcome back!</h4> -->
+                <h6 class="font-weight-light">Happy to see you again!</h6>
+                <form id="loginForm" method="POST" class="pt-3">
+                  <div class="form-group">
+                    <label for="exampleInputEmail">Username</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend bg-transparent">
+                        <span
+                          class="input-group-text bg-transparent border-right-0">
+                          <i class="fa fa-user text-primary"></i>
+                        </span>
+                      </div>
+                      <input type="email" name="email"
+                        class="form-control form-control-lg border-left-0"
+                        id="exampleInputEmail" placeholder="Enter Email">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword">Password</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend bg-transparent">
+                        <span
+                          class="input-group-text bg-transparent border-right-0">
+                          <i class="fa fa-lock text-primary"></i>
+                        </span>
+                      </div>
+                      <input type="password" name="password"
+                        class="form-control form-control-lg border-left-0"
+                        id="exampleInputPassword" placeholder="Password">
+                    </div>
+                  </div>
+                  <div
+                    class="my-2 d-flex justify-content-between align-items-center">
+                    <div class="form-check">
+                      <label class="form-check-label text-muted">
+                        <input type="checkbox" class="form-check-input">
+                        Keep me signed in
+                      </label>
+                    </div>
+                    <a href="#" class="auth-link text-black">Forgot
+                      password?</a>
+                  </div>
+                  <div class="my-3">
+                    <button class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" id="submitBtn">  LOGIN</button>
+                    <!-- <a class="" href="../admin/index-2.html">LOGIN</a> -->
+                  </div>
+
+                </form>
+              </div>
+            </div>
+            <div class="col-lg-6 login-half-bg d-flex flex-row">
+              <p
+                class="text-white font-weight-medium text-center flex-grow align-self-end">Copyright
+                &copy; 2024 All rights reserved.</p>
+            </div>
+          </div>
+        </div>
+        <!-- content-wrapper ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="../admin/vendors/js/vendor.bundle.base.js"></script>
+    <script src="../admin/vendors/js/vendor.bundle.addons.js"></script>
+    <!-- endinject -->
+    <!-- inject:js -->
+    <script src="../admin/js/off-canvas.js"></script>
+    <script src="../admin/js/hoverable-collapse.js"></script>
+    <script src="../admin/js/misc.js"></script>
+    <script src="../admin/js/settings.js"></script>
+    <script src="../admin/js/todolist.js"></script>
+    <!-- endinject -->
+
+    <!-- Include jQuery and Toastr libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        // Handle form submission with AJAX
+        $('#loginForm').submit(function(event) {
+            event.preventDefault(); // Prevent form from submitting traditionally
+            $('#loader1').show();
+          const email = $('#exampleInputEmail').val()
+          const password = $('#exampleInputPassword').val()
+            if (email =='') {
+              toastr.error('Please fill your valid email ID.');
+              return;
+            }
+            if (password =='') {
+              toastr.error('Please fill your valid password.');
+              return;
+            }
+            // Gather form data
+            const formData = {
+                username: $('#exampleInputEmail').val(),
+                password: $('#exampleInputPassword').val()
+            };
+
+            // toastr.success(formData);
+            console.log(formData);
+            // Make AJAX POST request
+            $.ajax({
+                type: 'POST',
+                url: '<%= process.env.ADMIN_PREFIX %>/loginAuth', // Adjust based on your server setup
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    // Handle successful login
+                    if (response.status === true) {
+                      toastr.success(response.message);
+                      setTimeout(() => {
+                        window.location.href='<%= process.env.ADMIN_PREFIX %>/dashboard';
+                      }, 1000);
+                    } else if (response.status === false) {
+                      toastr.error(response.message);
+                    } else if (response.errors) {
+                      if (response.errors.email) {
+                        toastr.error(response.errors.email);  
+                      }
+                      
+                      if (response.errors.password) {
+                        toastr.error(response.errors.password);
+                      }
+                     
+                    } else if (response.status == false) {
+                      toastr.error(response.errors.message);
+                    }else{
+                      toastr.error(response);
+                    }
+                    // console.log(response);
+                    // toastr.success(response.message);
+                    // Redirect or perform other actions
+                  //  window.location.href = process.env.ADMIN_PREFIX+'/dashboard'; // Example redirect
+                },
+                error: function(xhr, status, error) {
+                    // Handle error
+                    const errorMessage = xhr.responseJSON.error || 'Login failed';
+                    toastr.error(errorMessage);
+                }
+            });
+        });
+    </script>
+  </body>
+</html>

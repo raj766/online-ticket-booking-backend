@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(255)
+  email      String   @unique
+  password  String    @db.VarChar(255)
+  status  Int  @default(1)
+  created_date  DateTime @default(now())
+  updated_date  DateTime @updatedAt
+}
+
+model OperatorTypes {
+  id         Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255)
+  status  Int  @default(1)
+  created_date  DateTime @default(now())
+  updated_date  DateTime @updatedAt
+}
+
+model State {
+  id         Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255)
+  label_title       String   @db.VarChar(255)
+  state_code       String   @db.VarChar(255)
+  slug       String?   @db.VarChar(255)
+  status  Int  @default(1)
+  created_date  DateTime @default(now())
+  updated_date  DateTime @updatedAt
+}
+
+model cities {
+  id         Int      @id @default(autoincrement())
+  state_id       String   @db.VarChar(255)
+  popular_city  Int  @default(0)
+  title       String   @db.VarChar(255)
+  label_title       String   @db.VarChar(255)
+  city_code       String   @db.VarChar(255)
+  slug       String?   @db.VarChar(255)
+  image       String?   @db.VarChar(255)
+  status  Int  @default(1)
+  created_date  DateTime @default(now())
+  updated_date  DateTime @updatedAt
+}
